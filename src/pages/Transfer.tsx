@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -38,7 +37,6 @@ const Transfer: React.FC = () => {
   const [sourcePlaylist, setSourcePlaylist] = useState<any>(null);
   const [targetPlaylist, setTargetPlaylist] = useState<any>(null);
   
-  // If we came from the dashboard with a playlist already selected
   useEffect(() => {
     if (state.playlistId && state.platform) {
       fetchPlaylistDetails(state.playlistId, state.platform);
@@ -83,10 +81,8 @@ const Transfer: React.FC = () => {
     setTransferError(null);
     
     try {
-      // Fetch the source playlist details
       await fetchPlaylistDetails(sourcePlaylistId, sourcePlatform);
       
-      // Simulate the transfer process
       await simulateTransfer();
       
       setTransferComplete(true);
@@ -108,7 +104,6 @@ const Transfer: React.FC = () => {
   };
   
   const simulateTransfer = async () => {
-    // Create a new playlist on the target platform
     const playlistName = sourcePlaylist?.name || sourcePlaylist?.title || 'Transferred Playlist';
     const playlistDesc = `Transferred from ${sourcePlatform === 'spotify' ? 'Spotify' : 'YouTube Music'} using SyncTunes`;
     
@@ -127,13 +122,12 @@ const Transfer: React.FC = () => {
         setTargetPlaylist(newPlaylist);
       }
       
-      // Simulate the transfer process with progress updates
       const total = totalTracks;
-      const simulatedMatched = Math.floor(total * 0.85); // Assuming 85% match rate
+      const simulatedMatched = Math.floor(total * 0.85);
       setMatchedTracks(0);
       
       for (let i = 0; i < total; i++) {
-        await new Promise(resolve => setTimeout(resolve, 100)); // Simulate time for each track
+        await new Promise(resolve => setTimeout(resolve, 100));
         setProgress(Math.round(((i + 1) / total) * 100));
         
         if (i < simulatedMatched) {
@@ -141,15 +135,14 @@ const Transfer: React.FC = () => {
         }
       }
       
-      // Record the transfer in the database
       const transferRecord = {
-        userId: 'user1', // In a real app, this would be the authenticated user's ID
+        userId: 'user1',
         sourcePlatform,
         targetPlatform,
         sourcePlaylistId: sourcePlaylist?.id,
         targetPlaylistId: targetPlaylist?.id,
         songsTransferred: matchedTracks,
-        status: 'completed',
+        status: 'completed' as 'completed' | 'failed' | 'in-progress',
         createdAt: new Date(),
         completedAt: new Date()
       };

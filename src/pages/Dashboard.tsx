@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import Navbar from '@/components/Navbar';
@@ -13,11 +12,11 @@ import { SpotifyClient } from '@/lib/spotify';
 import { YouTubeClient } from '@/lib/youtube';
 import { firestore } from '@/lib/firebase';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Dashboard: React.FC = () => {
   const { toast } = useToast();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
   
   const [spotifyPlaylists, setSpotifyPlaylists] = useState<any[]>([]);

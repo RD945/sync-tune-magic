@@ -22,9 +22,20 @@ const MOCK_PLAYLISTS = {
   ]
 };
 
-const TransferForm: React.FC = () => {
-  const [direction, setDirection] = useState<'spotify-to-youtube' | 'youtube-to-spotify'>('spotify-to-youtube');
-  const [sourcePlaylist, setSourcePlaylist] = useState('');
+interface TransferFormProps {
+  onSubmit: (data: any) => void;
+  initialValues?: {
+    sourcePlatform: 'spotify' | 'youtube';
+    sourcePlaylistId: string;
+    includeAll: boolean;
+  };
+}
+
+const TransferForm: React.FC<TransferFormProps> = ({ onSubmit, initialValues }) => {
+  const [direction, setDirection] = useState<'spotify-to-youtube' | 'youtube-to-spotify'>(
+    initialValues?.sourcePlatform === 'youtube' ? 'youtube-to-spotify' : 'spotify-to-youtube'
+  );
+  const [sourcePlaylist, setSourcePlaylist] = useState(initialValues?.sourcePlaylistId || '');
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [transferComplete, setTransferComplete] = useState(false);
@@ -80,6 +91,15 @@ const TransferForm: React.FC = () => {
         toast({
           title: "Transfer Complete",
           description: `Successfully transferred ${totalSongs} songs`,
+        });
+        
+        // Call the parent's onSubmit callback with transfer data
+        onSubmit({
+          sourcePlatform: direction === 'spotify-to-youtube' ? 'spotify' : 'youtube',
+          targetPlatform: direction === 'spotify-to-youtube' ? 'youtube' : 'spotify',
+          sourcePlaylistId: sourcePlaylist,
+          includeAll: true,
+          totalSongs
         });
       }
     }, 300);
