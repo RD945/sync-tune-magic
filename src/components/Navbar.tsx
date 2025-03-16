@@ -32,6 +32,7 @@ const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
   const location = useLocation();
 
   useEffect(() => {
@@ -52,6 +53,13 @@ const Navbar: React.FC = () => {
   };
 
   const handleLogin = () => {
+    setActiveTab('login');
+    setShowAuthModal(true);
+    closeMobileMenu();
+  };
+
+  const handleSignup = () => {
+    setActiveTab('signup');
     setShowAuthModal(true);
     closeMobileMenu();
   };
@@ -96,19 +104,28 @@ const Navbar: React.FC = () => {
             ))}
           </nav>
 
-          {/* Auth Button */}
-          <div className="hidden md:block">
+          {/* Auth Buttons */}
+          <div className="hidden md:flex space-x-4">
             {isLoggedIn ? (
               <Button variant="outline" onClick={handleLogout}>
                 Logout
               </Button>
             ) : (
-              <Button 
-                className="bg-primary hover:bg-primary/90 text-white transition-all"
-                onClick={handleLogin}
-              >
-                Sign In
-              </Button>
+              <>
+                <Button 
+                  className="bg-primary hover:bg-primary/90 text-white transition-all"
+                  onClick={handleLogin}
+                >
+                  Sign In
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="border-youtube text-youtube hover:bg-youtube/10"
+                  onClick={handleSignup}
+                >
+                  Sign Up
+                </Button>
+              </>
             )}
           </div>
 
@@ -151,7 +168,7 @@ const Navbar: React.FC = () => {
             ))}
           </nav>
           
-          <div className="mt-auto">
+          <div className="mt-auto flex flex-col space-y-4">
             {isLoggedIn ? (
               <Button 
                 variant="outline" 
@@ -161,12 +178,21 @@ const Navbar: React.FC = () => {
                 Logout
               </Button>
             ) : (
-              <Button 
-                className="w-full bg-primary hover:bg-primary/90 text-white transition-all"
-                onClick={handleLogin}
-              >
-                Sign In
-              </Button>
+              <>
+                <Button 
+                  className="w-full bg-primary hover:bg-primary/90 text-white transition-all"
+                  onClick={handleLogin}
+                >
+                  Sign In
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full border-youtube text-youtube hover:bg-youtube/10"
+                  onClick={handleSignup}
+                >
+                  Sign Up
+                </Button>
+              </>
             )}
           </div>
         </div>
@@ -177,6 +203,7 @@ const Navbar: React.FC = () => {
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)}
         onSuccess={mockSuccessfulLogin}
+        initialTab={activeTab}
       />
     </>
   );

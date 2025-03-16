@@ -9,6 +9,7 @@ import { useToast } from '@/components/ui/use-toast';
 
 const Index: React.FC = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('login');
   const { toast } = useToast();
 
   const handleAuthSuccess = () => {
@@ -17,6 +18,16 @@ const Index: React.FC = () => {
       title: "Authentication successful",
       description: "Welcome to SyncTunes!",
     });
+  };
+
+  const handleSignInClick = () => {
+    setActiveTab('login');
+    setShowAuthModal(true);
+  };
+
+  const handleSignUpClick = () => {
+    setActiveTab('signup');
+    setShowAuthModal(true);
   };
 
   return (
@@ -51,7 +62,7 @@ const Index: React.FC = () => {
               
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button 
-                  onClick={() => setShowAuthModal(true)}
+                  onClick={handleSignUpClick}
                   className="bg-gradient-to-r from-spotify to-primary hover:opacity-90 gap-2 px-8 py-7 text-base"
                 >
                   Get Started
@@ -156,65 +167,6 @@ const Index: React.FC = () => {
           </div>
         </section>
         
-        {/* Testimonials */}
-        <section className="py-20 bg-gray-900/50">
-          <div className="container px-6 mx-auto max-w-7xl">
-            <div className="max-w-3xl mx-auto mb-16 text-center animate-stagger">
-              <h2 className="mb-4 font-semibold text-white">What Our Users Say</h2>
-              <p className="text-gray-300">
-                Join thousands of happy music lovers who use SyncTunes
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 animate-stagger">
-              <div className="p-6 glass-card">
-                <div className="flex items-center mb-4">
-                  <div className="flex-shrink-0 w-10 h-10 overflow-hidden rounded-full">
-                    <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="User" className="object-cover w-full h-full" />
-                  </div>
-                  <div className="ml-3">
-                    <h4 className="font-medium text-white">Emma Watson</h4>
-                    <p className="text-sm text-gray-400">Spotify User</p>
-                  </div>
-                </div>
-                <p className="text-gray-300">
-                  "SyncTunes saved me hours of work. I was able to move my 10-year Spotify collection to YouTube Music in minutes!"
-                </p>
-              </div>
-              
-              <div className="p-6 glass-card">
-                <div className="flex items-center mb-4">
-                  <div className="flex-shrink-0 w-10 h-10 overflow-hidden rounded-full">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" className="object-cover w-full h-full" />
-                  </div>
-                  <div className="ml-3">
-                    <h4 className="font-medium text-white">Alex Chen</h4>
-                    <p className="text-sm text-gray-400">YouTube Music User</p>
-                  </div>
-                </div>
-                <p className="text-gray-300">
-                  "I switch between services often, and SyncTunes makes it so easy to keep my playlists in sync. Absolutely love it!"
-                </p>
-              </div>
-              
-              <div className="p-6 glass-card md:col-span-2 lg:col-span-1">
-                <div className="flex items-center mb-4">
-                  <div className="flex-shrink-0 w-10 h-10 overflow-hidden rounded-full">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" className="object-cover w-full h-full" />
-                  </div>
-                  <div className="ml-3">
-                    <h4 className="font-medium text-white">Sophia Martinez</h4>
-                    <p className="text-sm text-gray-400">Music Enthusiast</p>
-                  </div>
-                </div>
-                <p className="text-gray-300">
-                  "The interface is beautiful and the transfers are incredibly accurate. I haven't lost a single track in the process."
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-        
         {/* CTA Section */}
         <section className="py-20">
           <div className="container px-6 mx-auto max-w-7xl">
@@ -245,13 +197,23 @@ const Index: React.FC = () => {
                     </li>
                   </ul>
                   
-                  <Button 
-                    onClick={() => setShowAuthModal(true)}
-                    className="bg-gradient-to-r from-youtube to-primary hover:opacity-90 gap-2 px-8 py-7 text-base"
-                  >
-                    Get Started Now
-                    <ArrowRight size={16} />
-                  </Button>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button 
+                      onClick={handleSignInClick}
+                      className="bg-gradient-to-r from-primary to-spotify hover:opacity-90 gap-2 px-8 py-7 text-base"
+                    >
+                      Sign In
+                      <ArrowRight size={16} />
+                    </Button>
+                    <Button 
+                      onClick={handleSignUpClick}
+                      variant="outline"
+                      className="border-youtube text-youtube hover:bg-youtube/10 gap-2 px-8 py-7 text-base"
+                    >
+                      Sign Up
+                      <ArrowRight size={16} />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -265,6 +227,7 @@ const Index: React.FC = () => {
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         onSuccess={handleAuthSuccess}
+        initialTab={activeTab}
       />
     </div>
   );
